@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 number = "";
                 tv_operations.setText("");
-                tv_result.setText("0");
+                tv_result.setText("");
                 lastNumeric = false;
                 lastDot = false;
             }
