@@ -1,36 +1,50 @@
 package com.example.myapplication;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    Button btn_curly1,btn_curly2, btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn_00, btn_decimal,btn_modulus,btn_delAll,btn_delete, btn_equal, btn_minus, btn_multiply ,  btn_divide ,btn_plus;
-    Button btn_sin, btn_cos, btn_tan, btn_pow;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    private static final String PREFS_NAME = "calc_history_prefs";
+    private static final String KEY_HISTORY = "history";
+
+    Button btn_curly1, btn_curly2, btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn_decimal;
+    Button btn_modulus, btn_delAll, btn_delete, btn_equal, btn_minus, btn_multiply, btn_divide, btn_plus;
+    Button btn_sin, btn_cos, btn_tan, btn_log, btn_sqrt, btn_pow, btn_history;
     TextView tv_operations, tv_result;
     String number = "";
     boolean lastNumeric = false;
     boolean lastDot = false;
+    boolean lastOperator = false;
+
+    ArrayList<String> history = new ArrayList<>(); // History of operations
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Link TextViews
         tv_operations = findViewById(R.id.tv_operations);
         tv_result = findViewById(R.id.tv_result);
 
-        // Number buttons
-        btn_curly1=findViewById(R.id.btn_curlyBracket1);
-        btn_curly2=findViewById(R.id.btn_curlyBracket2);
+        // Button initialization
+        btn_curly1 = findViewById(R.id.btn_curlyBracket1);
+        btn_curly2 = findViewById(R.id.btn_curlyBracket2);
+        btn_cos = findViewById(R.id.btn_cos);
+        btn_sin = findViewById(R.id.btn_sin);
+        btn_tan = findViewById(R.id.btn_tan);
         btn0 = findViewById(R.id.btn_0);
         btn1 = findViewById(R.id.btn_1);
         btn2 = findViewById(R.id.btn_2);
@@ -41,11 +55,7 @@ public class MainActivity extends AppCompatActivity {
         btn7 = findViewById(R.id.btn_7);
         btn8 = findViewById(R.id.btn_8);
         btn9 = findViewById(R.id.btn_9);
-//        btn_00 = findViewById(R.id.btn_00);
         btn_decimal = findViewById(R.id.btn_decimal);
-
-
-        // Operation buttons
         btn_plus = findViewById(R.id.btn_plus);
         btn_minus = findViewById(R.id.btn_minus);
         btn_multiply = findViewById(R.id.btn_multiply);
@@ -54,14 +64,12 @@ public class MainActivity extends AppCompatActivity {
         btn_equal = findViewById(R.id.btn_equal);
         btn_delAll = findViewById(R.id.btn_delAll);
         btn_delete = findViewById(R.id.btn_delete);
+        btn_log = findViewById(R.id.btn_log);
+        btn_sqrt = findViewById(R.id.btn_sqrt);
+        btn_pow = findViewById(R.id.btn_pow);
+        btn_history = findViewById(R.id.btn_history);
 
-        // Scientific buttons
-        btn_sin = findViewById(R.id.btn_sin);
-        btn_cos = findViewById(R.id.btn_cos);
-        btn_tan = findViewById(R.id.btn_tan);
-//        btn_pow = findViewById(R.id.btn_pow);
-
-        // Set listeners for all buttons
+        // Set listeners for buttons
         setNumberListeners();
         setOperationListeners();
     }
@@ -71,23 +79,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Button button = (Button) v;
-                if (button.getText().equals("sin") || button.getText().equals("cos") || button.getText().equals("tan")) {
-                    // Add Math. to trigonometric functions for proper evaluation
-                    number +=button.getText() + "(";
-                } else {
-                    number += button.getText();
-                }
+                number += button.getText();
                 tv_operations.setText(number);
                 lastNumeric = true;
+                lastOperator = false;
+                lastDot = false;  // Reset lastDot on number input
             }
         };
 
-        // Set listeners for numbers
+        // Number button click listeners
         btn_curly1.setOnClickListener(numberClickListener);
         btn_curly2.setOnClickListener(numberClickListener);
-        btn_cos.setOnClickListener(numberClickListener);
-        btn_tan.setOnClickListener(numberClickListener);
-        btn_sin.setOnClickListener(numberClickListener);
         btn0.setOnClickListener(numberClickListener);
         btn1.setOnClickListener(numberClickListener);
         btn2.setOnClickListener(numberClickListener);
@@ -98,9 +100,43 @@ public class MainActivity extends AppCompatActivity {
         btn7.setOnClickListener(numberClickListener);
         btn8.setOnClickListener(numberClickListener);
         btn9.setOnClickListener(numberClickListener);
-//        btn_00.setOnClickListener(numberClickListener);
 
-        // Decimal button listener
+        btn_sin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lastNumeric || number.isEmpty()||lastOperator) {
+                    number += "sin("; // Allow sin after a number or operator
+                    tv_operations.setText(number);
+                    lastNumeric = false; // Reset lastNumeric because we're adding a function
+                    lastOperator = false; // Reset lastOperator
+                }
+            }
+        });
+
+        btn_cos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lastNumeric || number.isEmpty()||lastOperator) {
+                    number += "cos("; // Allow cos after a number or operator
+                    tv_operations.setText(number);
+                    lastNumeric = false; // Reset lastNumeric
+                    lastOperator = false; // Reset lastOperator
+                }
+            }
+        });
+
+        btn_tan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lastNumeric || number.isEmpty()||lastOperator) {
+                    number += "tan("; // Allow tan after a number or operator
+                    tv_operations.setText(number);
+                    lastNumeric = false; // Reset lastNumeric
+                    lastOperator = false; // Reset lastOperator
+                }
+            }
+        });
+
         btn_decimal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,86 +150,145 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     private void setOperationListeners() {
         View.OnClickListener operationClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Button button = (Button) v;
-                if(lastNumeric) {
-                    number += button.getText();
-                    tv_operations.setText(number);
-                    lastNumeric = false;
-                    lastDot = false;
+                String operator = button.getText().toString();
+
+                if (operator.equals("-")) {
+                    if (number.isEmpty() || !lastNumeric) {
+                        number += "-";
+                        lastNumeric = false;
+                        lastOperator = false;
+                    } else if (lastNumeric && !lastOperator) {
+                        number += operator;
+                        lastNumeric = false;
+                        lastOperator = true;
+                    }
+                } else {
+                    if (lastNumeric) {
+                        number += operator;
+                        lastNumeric = false;
+                        lastOperator = true;
+                        lastDot = false;
+                    } else if (lastOperator) {
+                        number = number.substring(0, number.length() - 1) + operator;
+                    }
                 }
 
+                tv_operations.setText(number);
             }
         };
 
-        // Set listeners for operations
+        // Set listeners for the operations
         btn_plus.setOnClickListener(operationClickListener);
         btn_minus.setOnClickListener(operationClickListener);
         btn_multiply.setOnClickListener(operationClickListener);
         btn_divide.setOnClickListener(operationClickListener);
         btn_modulus.setOnClickListener(operationClickListener);
-//        btn_pow.setOnClickListener(operationClickListener);
 
-        // Equal button listener
-        btn_equal.setOnClickListener(new View.OnClickListener() {
+        // Adding listeners for new operations
+        btn_log.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String expression = tv_operations.getText().toString();
+                if (lastNumeric || lastOperator|| number.isEmpty()) {
+                    number += "log(";
+                    tv_operations.setText(number);
+                    lastNumeric = false;
+                    lastOperator = false;
+                }
+            }
+        });
 
-                // Only evaluate if the last input was numeric
-                if (lastNumeric) {
-                    // Replace sin, cos, tan with Math.sin, Math.cos, Math.tan
-                    expression = expression.replace("sin", "Math.sin")
-                            .replace("cos", "Math.cos")
-                            .replace("x", "*")
-                            .replace("tan", "Math.tan");
-
-                    // Handling power function (^): Using regex to wrap base and exponent in Math.pow(base, exponent)
-                    expression = expression.replaceAll("(\\d+)\\^(\\d+)", "Math.pow($1,$2)");
-
-                    // Check for division by zero
-                    if (expression.contains("/0")) {
-                        tv_result.setText("Error");
-                        return;
-                    }
-
-                    Context rhino = Context.enter();
-                    rhino.setOptimizationLevel(-1);
-                    String result = "";
-                    try {
-                        Scriptable scriptable = rhino.initStandardObjects();
-                        result = rhino.evaluateString(scriptable, expression, "javascript", 1, null).toString();
-
-                        // Additional check: If result is "Infinity", also treat it as an error
-                        if (result.equals("Infinity")) {
-                            result = "Error";
-                        } else {
-                            // Convert the result to a double
-                            double doubleResult = Double.parseDouble(result);
-
-                            // Check if it's actually an integer
-                            if (doubleResult == Math.floor(doubleResult)) {
-                                // If it is an integer, cast it to an int and show without decimal
-                                result = String.valueOf((int) doubleResult);
-                            }
-                        }
-                    } catch (Exception e) {
-                        result = "Error";
-                    } finally {
-                        Context.exit();
-                    }
-
-                    tv_result.setText(result);
+        btn_sqrt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lastNumeric || number.isEmpty()) {
+                    number += "√"; // Use the symbol for square root
+                    tv_operations.setText(number);
+                    lastNumeric = false;
+                    lastOperator = false;
                 }
             }
         });
 
 
-        // Clear button listener
+        btn_pow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lastNumeric) {
+                    number += "^";
+                    tv_operations.setText(number);
+                    lastNumeric = false;
+                    lastOperator = true;
+                }
+            }
+        });
+
+        btn_history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+                intent.putStringArrayListExtra("history", history);  // Pass the history list to the next activity
+                startActivity(intent);
+            }
+        });
+        sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        // Load saved history
+        loadHistory();
+        btn_equal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String originalExpression = tv_operations.getText().toString();  // Store the user-friendly expression
+
+                if (lastNumeric) {
+                    try {
+                        String expression = originalExpression
+                                .replaceAll("sin\\(([^)]+)\\)", "Math.sin(Math.PI / 180 * $1)")
+                                .replaceAll("cos\\(([^)]+)\\)", "Math.cos(Math.PI / 180 * $1)")
+                                .replaceAll("tan\\(([^)]+)\\)", "((Math.abs($1) % 180) == 0 ? 0 : Math.tan(Math.PI / 180 * $1))")
+                                .replaceAll("log\\(([^)]+)\\)", "Math.log10($1)") // Base 10 log
+                                .replaceAll("√(\\d+)", "Math.sqrt($1)") // Replace √ with Math.sqrt
+                                .replaceAll("(\\d+)\\^(\\d+)", "Math.pow($1, $2)") // Handle power calculations
+                                .replace("x", "*");
+
+                        if (expression.contains("/0")) {
+                            tv_result.setText("Error");
+                            return;
+                        }
+
+                        Context rhino = Context.enter();
+                        rhino.setOptimizationLevel(-1);
+                        try {
+                            org.mozilla.javascript.Scriptable scope = rhino.initStandardObjects();
+                            Object result = rhino.evaluateString(scope, expression, "JavaScript", 1, null);
+                            if (result != null) {
+                                double doubleResult = Double.parseDouble(result.toString());
+                                tv_result.setText(String.valueOf(doubleResult));
+
+                                // Store the original expression and result in history
+                                String historyEntry = originalExpression + " = " + doubleResult;
+                                history.add(historyEntry);
+
+                                // Save the updated history to SharedPreferences
+                                saveHistory();
+                            }
+                        } finally {
+                            Context.exit();
+                        }
+
+                    } catch (Exception e) {
+                        Log.e("CalculatorError", "Error evaluating expression: " + e.getMessage());
+                        tv_result.setText("Error");
+                    }
+                }
+            }
+        });
+
         btn_delAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,18 +297,39 @@ public class MainActivity extends AppCompatActivity {
                 tv_result.setText("");
                 lastNumeric = false;
                 lastDot = false;
+                lastOperator = false;
             }
         });
 
-        // Delete (backspace) button listener
         btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (number.length() > 0) {
+                if (!number.isEmpty()) {
                     number = number.substring(0, number.length() - 1);
                     tv_operations.setText(number);
                 }
             }
         });
+    }
+    private void saveHistory() {
+        StringBuilder historyString = new StringBuilder();
+        for (String entry : history) {
+            historyString.append(entry).append(";;");  // Use a delimiter
+        }
+        editor.putString(KEY_HISTORY, historyString.toString());
+        editor.apply();  // Save changes asynchronously
+    }
+
+    // Load history from SharedPreferences
+    private void loadHistory() {
+        String savedHistory = sharedPreferences.getString(KEY_HISTORY, "");
+        if (!savedHistory.isEmpty()) {
+            String[] entries = savedHistory.split(";;");
+            for (String entry : entries) {
+                if (!entry.trim().isEmpty()) {
+                    history.add(entry);
+                }
+            }
+        }
     }
 }

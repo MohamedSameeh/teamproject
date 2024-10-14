@@ -46,7 +46,7 @@
         android:paddingStart="10dp"
         android:rowCount="6"
         android:columnCount="4"
-        android:paddingTop="10dp"
+        android:paddingTop="0dp"
         android:alignmentMode="alignMargins"
         android:columnOrderPreserved="false">
 
@@ -103,6 +103,17 @@
 
         <!-- Row 6: Clear, Delete, Equal, Modulus -->
         <Button android:backgroundTint="#f08221" android:id="@+id/btn_equal" android:text="=" style="@style/CalculatorButton" android:background="@drawable/btns_shape"/>
+        <Button android:id="@+id/btn_log" android:text="log" style="@style/CalculatorButton" android:background="@drawable/btns_shape"/>
+        <Button android:id="@+id/btn_sqrt" android:text="√" style="@style/CalculatorButton" android:background="@drawable/btns_shape"/>
+        <Button android:id="@+id/btn_pow" android:text="^" style="@style/CalculatorButton" android:background="@drawable/btns_shape"/>
+
+        <Button
+            android:id="@+id/btn_history"
+            style="@style/CalculatorButton"
+            android:background="@drawable/btns_shape"
+            android:backgroundTint="@color/teal_700"
+            android:text="H" />
+
 
 
     </GridLayout>
