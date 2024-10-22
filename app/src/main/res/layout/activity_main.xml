@@ -240,8 +240,9 @@
             android:id="@+id/btn_modulus"
             style="@style/CalculatorButton"
             android:background="@drawable/btns_shape"
-            android:backgroundTint="#063A47"
-            android:text="%"
+            android:backgroundTint="#228B22"
+            android:text="≡"
+            android:textSize="30sp"
             android:textColor="#FEFEFE" />
 
         <Button

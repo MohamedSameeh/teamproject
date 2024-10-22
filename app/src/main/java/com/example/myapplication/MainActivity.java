@@ -189,7 +189,13 @@ public class MainActivity extends AppCompatActivity {
         btn_minus.setOnClickListener(operationClickListener);
         btn_multiply.setOnClickListener(operationClickListener);
         btn_divide.setOnClickListener(operationClickListener);
-        btn_modulus.setOnClickListener(operationClickListener);
+        btn_modulus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(MainActivity.this, volume_area_Activity.class);
+                startActivity(i);
+            }
+        });
 
         // Adding listeners for new operations
         btn_log.setOnClickListener(new View.OnClickListener() {
