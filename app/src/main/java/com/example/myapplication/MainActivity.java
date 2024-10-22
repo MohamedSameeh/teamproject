@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     private static final String PREFS_NAME = "calc_history_prefs";
     private static final String KEY_HISTORY = "history";
-
+    private static final int REQUEST_CODE_HISTORY = 1;
     Button btn_curly1, btn_curly2, btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn_decimal;
     Button btn_modulus, btn_delAll, btn_delete, btn_equal, btn_minus, btn_multiply, btn_divide, btn_plus;
     Button btn_sin, btn_cos, btn_tan, btn_log, btn_sqrt, btn_pow, btn_history;
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         btn_sin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (lastNumeric || number.isEmpty()||lastOperator) {
+                if (!lastNumeric || number.isEmpty() || lastOperator) {
                     number += "sin("; // Allow sin after a number or operator
                     tv_operations.setText(number);
                     lastNumeric = false; // Reset lastNumeric because we're adding a function
@@ -116,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         btn_cos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (lastNumeric || number.isEmpty()||lastOperator) {
+                if (!lastNumeric || number.isEmpty() || lastOperator) {
                     number += "cos("; // Allow cos after a number or operator
                     tv_operations.setText(number);
                     lastNumeric = false; // Reset lastNumeric
@@ -128,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         btn_tan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (lastNumeric || number.isEmpty()||lastOperator) {
+                if (!lastNumeric || number.isEmpty() || lastOperator) {
                     number += "tan("; // Allow tan after a number or operator
                     tv_operations.setText(number);
                     lastNumeric = false; // Reset lastNumeric
@@ -193,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
         btn_log.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (lastNumeric || lastOperator|| number.isEmpty()) {
+                if (!lastNumeric || lastOperator || number.isEmpty()) {
                     number += "log(";
                     tv_operations.setText(number);
                     lastNumeric = false;
@@ -205,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
         btn_sqrt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (lastNumeric || number.isEmpty()) {
+                if (!lastNumeric || lastOperator || number.isEmpty()) {
                     number += "√"; // Use the symbol for square root
                     tv_operations.setText(number);
                     lastNumeric = false;
@@ -213,7 +215,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         btn_pow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,9 +231,10 @@ public class MainActivity extends AppCompatActivity {
         btn_history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Launch HistoryActivity
                 Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
-                intent.putStringArrayListExtra("history", history);  // Pass the history list to the next activity
-                startActivity(intent);
+                intent.putStringArrayListExtra("history", history);  // Pass the history to HistoryActivity
+                startActivityForResult(intent, REQUEST_CODE_HISTORY);  // Start activity for result
             }
         });
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -240,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Load saved history
         loadHistory();
+
         btn_equal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -247,35 +250,54 @@ public class MainActivity extends AppCompatActivity {
 
                 if (lastNumeric) {
                     try {
+                        // Modify the expression handling for trigonometric and log functions
                         String expression = originalExpression
-                                .replaceAll("sin\\(([^)]+)\\)", "Math.sin(Math.PI / 180 * $1)")
-                                .replaceAll("cos\\(([^)]+)\\)", "Math.cos(Math.PI / 180 * $1)")
-                                .replaceAll("tan\\(([^)]+)\\)", "((Math.abs($1) % 180) == 0 ? 0 : Math.tan(Math.PI / 180 * $1))")
-                                .replaceAll("log\\(([^)]+)\\)", "Math.log10($1)") // Base 10 log
-                                .replaceAll("√(\\d+)", "Math.sqrt($1)") // Replace √ with Math.sqrt
-                                .replaceAll("(\\d+)\\^(\\d+)", "Math.pow($1, $2)") // Handle power calculations
+                                .replaceAll("sin\\(([^)]+)\\)", "Math.sin(Math.PI / 180 * ($1))")
+                                .replaceAll("cos\\(([^)]+)\\)", "(($1 % 360 == 90 || $1 % 360 == 270) ? 0 : Math.cos(Math.PI / 180 * ($1)))")
+                                .replaceAll("tan\\(([^)]+)\\)", "($1 == 45 ? 1 : (($1 % 180 == 90) ? 'undefined' : Math.tan(Math.PI / 180 * ($1))))")
+                                .replaceAll("log\\(([^)]+)\\)", "Math.log10($1)")
+                                .replaceAll("√(\\d+)", "Math.sqrt($1)")
+                                .replaceAll("(\\d+)\\^(\\d+)", "Math.pow($1, $2)")
                                 .replace("x", "*");
 
+                        // Handle division by zero
                         if (expression.contains("/0")) {
                             tv_result.setText("Error");
                             return;
                         }
 
+                        // Use Rhino JavaScript engine for evaluation
                         Context rhino = Context.enter();
                         rhino.setOptimizationLevel(-1);
                         try {
                             org.mozilla.javascript.Scriptable scope = rhino.initStandardObjects();
                             Object result = rhino.evaluateString(scope, expression, "JavaScript", 1, null);
-                            if (result != null) {
+
+                            if (result != null && !result.toString().equals("undefined")) {
                                 double doubleResult = Double.parseDouble(result.toString());
-                                tv_result.setText(String.valueOf(doubleResult));
 
-                                // Store the original expression and result in history
-                                String historyEntry = originalExpression + " = " + doubleResult;
-                                history.add(historyEntry);
+                                // Check if the result is NaN or Infinity
+                                if (Double.isNaN(doubleResult) || Double.isInfinite(doubleResult)) {
+                                    tv_result.setText("Error");
+                                } else {
+                                    // Check if the result is a whole number or a decimal
+                                    if (doubleResult == (long) doubleResult) {
+                                        // If the result is an integer, display it without decimals
+                                        tv_result.setText(String.valueOf((long) doubleResult));
+                                    } else {
+                                        // Otherwise, display the result as a double
+                                        tv_result.setText(String.valueOf(doubleResult));
+                                    }
 
-                                // Save the updated history to SharedPreferences
-                                saveHistory();
+                                    // Store the original expression and result in history
+                                    String historyEntry = originalExpression + " = " + tv_result.getText().toString();
+                                    history.add(historyEntry);
+
+                                    // Save the updated history to SharedPreferences
+                                    saveHistory();
+                                }
+                            } else {
+                                tv_result.setText("Error");
                             }
                         } finally {
                             Context.exit();
@@ -289,6 +311,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+
         btn_delAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,8 +321,8 @@ public class MainActivity extends AppCompatActivity {
                 tv_operations.setText("");
                 tv_result.setText("");
                 lastNumeric = false;
-                lastDot = false;
                 lastOperator = false;
+                lastDot = false;
             }
         });
 
@@ -305,26 +330,35 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!number.isEmpty()) {
-                    number = number.substring(0, number.length() - 1);
-                    tv_operations.setText(number);
+                    // Check if the last part of the number is a function (sin, cos, tan)
+                    if (number.endsWith("sin(")) {
+                        number = number.substring(0, number.length() - 4);  // Remove 'sin('
+                    } else if (number.endsWith("cos(")) {
+                        number = number.substring(0, number.length() - 4);  // Remove 'cos('
+                    } else if (number.endsWith("tan(")) {
+                        number = number.substring(0, number.length() - 4);  // Remove 'tan('
+                    }else if (number.endsWith("log(")) {
+                        number = number.substring(0, number.length() - 4);
+                    } else if (!number.isEmpty()) {
+                        // Otherwise, just delete the last character
+                        number = number.substring(0, number.length() - 1);
+                    }
+
+                    tv_operations.setText(number);  // Update the display
+                    lastNumeric = false;
+                    lastOperator = false;
                 }
             }
         });
-    }
-    private void saveHistory() {
-        StringBuilder historyString = new StringBuilder();
-        for (String entry : history) {
-            historyString.append(entry).append(";;");  // Use a delimiter
-        }
-        editor.putString(KEY_HISTORY, historyString.toString());
-        editor.apply();  // Save changes asynchronously
+
     }
 
-    // Load history from SharedPreferences
     private void loadHistory() {
+        history.clear();
         String savedHistory = sharedPreferences.getString(KEY_HISTORY, "");
+        Log.d("History", "Loaded history: " + savedHistory); // Log the loaded history
         if (!savedHistory.isEmpty()) {
-            String[] entries = savedHistory.split(";;");
+            String[] entries = savedHistory.split(";");
             for (String entry : entries) {
                 if (!entry.trim().isEmpty()) {
                     history.add(entry);
@@ -332,4 +366,49 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void saveHistory() {
+        StringBuilder sb = new StringBuilder();
+        for (String entry : history) {
+            sb.append(entry).append(";");
+        }
+        editor.putString(KEY_HISTORY, sb.toString());
+        editor.apply();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_HISTORY && resultCode == RESULT_OK) {
+            if (data != null) {
+                // Check if the user selected an operation from the history
+                if (data.hasExtra("selected_operation")) {
+                    String selectedOperation = data.getStringExtra("selected_operation");
+
+                    if (selectedOperation != null) {
+                        // Set the selected operation to tv_operations
+                        number = selectedOperation;  // Set the operation back into the number variable
+                        tv_operations.setText(number);  // Display the operation
+
+                        // Adjust the flags as necessary
+                        lastNumeric = true;  // Assuming the last part of the operation is numeric
+                        lastOperator = false;  // Adjust flags accordingly
+                    }
+
+                } else if (data.hasExtra("history")) {
+                    // Get the updated (cleared) history from HistoryActivity
+                    ArrayList<String> updatedHistory = data.getStringArrayListExtra("history");
+                    if (updatedHistory != null) {
+                        history.clear();
+                        history.addAll(updatedHistory);  // Update the local history in MainActivity
+                        saveHistory();  // Save the updated history (empty or new)
+                    }
+                }
+            }
+        }
+    }
+
+
 }

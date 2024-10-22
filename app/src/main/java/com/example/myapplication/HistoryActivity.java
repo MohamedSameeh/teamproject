@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -37,25 +38,45 @@ public class HistoryActivity extends AppCompatActivity {
         btnClearHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                history.clear();  // Clear the history list
-                historyContainer.removeAllViews();  // Clear all displayed history entries
+                // Clear the history list
+                history.clear();
+                // Clear all displayed history entries
+                historyContainer.removeAllViews();
 
                 // Clear history in SharedPreferences
                 SharedPreferences sharedPreferences = getSharedPreferences("calc_history_prefs", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear();  // Clear all data in SharedPreferences
+                editor.putString("history", ""); // Set history to an empty string
                 editor.apply();  // Apply changes
+
+                // Send the cleared history back to MainActivity
+                Intent intent = new Intent();
+                intent.putStringArrayListExtra("history", history);  // Pass back the cleared history
+                setResult(RESULT_OK, intent);  // Set result OK to notify MainActivity
+                finish();  // Close HistoryActivity and return to MainActivity
             }
         });
+
+
     }
 
     // Method to display history entries dynamically
     private void displayHistory() {
-        for (String entry : history) {
+        for (final String entry : history) {
             TextView historyEntry = new TextView(this);
             historyEntry.setText(entry);
-            historyEntry.setTextSize(18);
-            historyEntry.setPadding(10, 10, 10, 10);
+            historyEntry.setTextSize(22);
+            historyEntry.setPadding(10, 15, 10, 10);
+            historyEntry.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.putExtra("selected_operation", entry.split(" = ")[0]);  // Pass back only the operation (before "=")
+                    setResult(RESULT_OK, intent);  // Set result OK to notify MainActivity
+                    finish();  // Close the HistoryActivity and return to MainActivity
+                }
+            });
+
             historyContainer.addView(historyEntry);
         }
     }

@@ -2,26 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
 
-        <LinearLayout
-            android:id="@+id/history_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
+<ScrollView
+android:layout_width="match_parent"
+android:layout_height="0dp"
+android:layout_weight="1"
+android:background="@drawable/history_background"
+    android:padding="8dp"
+    android:scrollbars="none">
 
+    <!-- LinearLayout where history entries will be dynamically added -->
+<LinearLayout
+android:id="@+id/history_container"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical" />
     </ScrollView>
 
-    <Button
-        android:id="@+id/btn_clear_history"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CLEAR HISTORY" />
-
-</LinearLayout>
+    <!-- Button to clear history -->
+<Button
+android:id="@+id/btn_clear_history"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:text="CLEAR HISTORY"
+android:textColor="@color/white"
+android:background="@drawable/button_background"
+android:textStyle="bold"
+android:padding="12dp"
+android:layout_marginTop="16dp" />
+    </LinearLayout>
