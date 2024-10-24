@@ -13,13 +13,43 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".volumeActivity"
+            android:name=".volume_area.volume_activites.RectangularPrismVolumeActivity"
             android:exported="false" />
         <activity
-            android:name=".areaActivity"
+            android:name=".volume_area.volume_activites.ConeVolumeActivity"
             android:exported="false" />
         <activity
-            android:name=".volume_area_Activity"
+            android:name=".volume_area.volume_activites.CubeVolumeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".volume_area.volume_activites.SphereVolumeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".volume_area.volume_activites.CylinderVolumeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".volume_area.area_activites.parallelogram_area_activity"
+            android:exported="false" />
+        <activity
+            android:name=".volume_area.area_activites.triangle_area_activity"
+            android:exported="false" />
+        <activity
+            android:name=".volume_area.area_activites.circle_area_activity"
+            android:exported="false" />
+        <activity
+            android:name=".volume_area.area_activites.rectangle_area_activity"
+            android:exported="false" />
+        <activity
+            android:name=".volume_area.area_activites.square_calculation_activity"
+            android:exported="false" />
+        <activity
+            android:name=".volume_area.volumeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".volume_area.areaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".volume_area.volume_area_Activity"
             android:exported="false" />
         <activity
             android:name=".HistoryActivity"

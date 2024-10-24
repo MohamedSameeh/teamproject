@@ -1,10 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".volumeActivity">
+    android:padding="16dp"
+    android:background="@color/background_color"
+    tools:context=".volume_area.volumeActivity">
+
+    <!-- Title for Volume Calculations -->
+    <TextView
+        android:id="@+id/volume_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Volume Calculator"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="@color/primary_color"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp" />
+
+    <!-- Cylinder Button -->
+    <Button
+        android:id="@+id/button_cylinder"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/rounded_button"
+        android:elevation="6dp"
+        android:text="Cylinder"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/volume_title" />
+
+    <!-- Sphere Button -->
+    <Button
+        android:id="@+id/button_sphere"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_button"
+        android:elevation="6dp"
+        android:text="Sphere"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_cylinder" />
+
+    <!-- Cube Button -->
+    <Button
+        android:id="@+id/button_cube"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_button"
+        android:elevation="6dp"
+        android:text="Cube"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_sphere" />
+
+    <Button
+        android:id="@+id/button_cone"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_button"
+        android:elevation="6dp"
+        android:text="Cone"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_cube" />
+
+    <!-- Rectangular Prism Button -->
+    <Button
+        android:id="@+id/button_rectangular_prism"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_button"
+        android:elevation="6dp"
+        android:text="Rectangular Prism"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_cone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,15 +1,13 @@
-package com.example.myapplication;
+package com.example.myapplication.volume_area;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.myapplication.R;
 
 public class volume_area_Activity extends AppCompatActivity {
    Button area_btn,volume_btn;
@@ -22,14 +20,14 @@ public class volume_area_Activity extends AppCompatActivity {
         area_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i =new Intent(volume_area_Activity.this,areaActivity.class);
+                Intent i =new Intent(volume_area_Activity.this, areaActivity.class);
                 startActivity(i);
             }
         });
         volume_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i =new Intent(volume_area_Activity.this,volumeActivity.class);
+                Intent i =new Intent(volume_area_Activity.this, volumeActivity.class);
                 startActivity(i);
             }
         });

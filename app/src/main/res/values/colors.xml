@@ -12,4 +12,8 @@
     <color name="button_start">#4CAF50</color> <!-- Button start gradient color -->
     <color name="button_end">#388E3C</color> <!-- Button end gradient color -->
     <color name="button_pressed">#1B5E20</color> <!-- Dark green for pressed state -->
+    <color name="primary_color">#6200EA</color>
+
+
+
 </resources>
