@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/input_a"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/rounded_button"
+        android:hint="Enter value for a"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/input_b"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/rounded_button"
+        android:hint="Enter value for b"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/input_c"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/rounded_button"
+        android:hint="Enter value for c"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/input_d"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/rounded_button"
+        android:hint="Enter value for d"
+        android:inputType="numberDecimal" />
+
+    <Button
+        android:id="@+id/solve_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/rounded_button"
+        android:text="Solve" />
+
+    <TextView
+        android:id="@+id/result_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:paddingTop="16dp"
+        android:text="Result" />
+
+</LinearLayout>

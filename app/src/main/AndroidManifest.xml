@@ -13,6 +13,21 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".volume_area.equations.HigherDegreeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".volume_area.equations.ThirdDegreeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".volume_area.equations.SecondDegreeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".volume_area.equations.FirstDegreeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".volume_area.equations.equations"
+            android:exported="false" />
+        <activity
             android:name=".volume_area.volume_activites.RectangularPrismVolumeActivity"
             android:exported="false" />
         <activity

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".volume_area.equations.equations">
+
+    <Button
+        android:id="@+id/buttonFirstDegree"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="108dp"
+        android:background="@drawable/rounded_button"
+        android:padding="16dp"
+        android:text="Solve First-Degree Equation"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonSecondDegree"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_button"
+        android:padding="16dp"
+        android:text="Solve Second-Degree Equation"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/buttonFirstDegree"
+        app:layout_constraintStart_toStartOf="@+id/buttonFirstDegree"
+        app:layout_constraintTop_toBottomOf="@id/buttonFirstDegree" />
+
+    <Button
+        android:id="@+id/buttonThirdDegree"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_button"
+        android:padding="16dp"
+        android:text="Solve Third-Degree Equation"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/buttonSecondDegree"
+        app:layout_constraintStart_toStartOf="@+id/buttonSecondDegree"
+        app:layout_constraintTop_toBottomOf="@id/buttonSecondDegree" />
+
+    <Button
+        android:id="@+id/buttonHigherDegree"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_button"
+        android:padding="16dp"
+        android:text="Solve Higher-Degree Equation"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/buttonThirdDegree"
+        app:layout_constraintStart_toStartOf="@+id/buttonThirdDegree"
+        app:layout_constraintTop_toBottomOf="@id/buttonThirdDegree" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

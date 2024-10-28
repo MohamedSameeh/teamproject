@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="16dp"
     android:background="@color/background_color"
-    tools:context=".volume_area.volume_activites.SquareAreaActivity">
+    >
 
     <TextView
         android:id="@+id/square_area_title"

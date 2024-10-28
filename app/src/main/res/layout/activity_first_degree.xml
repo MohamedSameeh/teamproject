@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+    <!-- First Equation Inputs -->
+    <EditText
+        android:id="@+id/editTextA1"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingStart="10dp"
+        android:hint="Enter coefficient a1"
+        android:inputType="numberDecimal"
+        android:background="@drawable/rounded_button" />
+
+    <EditText
+        android:id="@+id/editTextB1"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingStart="10dp"
+        android:hint="Enter coefficient b1"
+        android:inputType="numberDecimal"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_button" />
+
+    <EditText
+        android:id="@+id/editTextC1"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingStart="10dp"
+        android:hint="Enter constant c1"
+        android:inputType="numberDecimal"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_button" />
+
+    <!-- Second Equation Inputs -->
+    <EditText
+        android:id="@+id/editTextA2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingStart="10dp"
+        android:hint="Enter coefficient a2"
+        android:inputType="numberDecimal"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_button" />
+
+    <EditText
+        android:id="@+id/editTextB2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingStart="10dp"
+        android:hint="Enter coefficient b2"
+        android:inputType="numberDecimal"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_button" />
+
+    <EditText
+        android:id="@+id/editTextC2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingStart="10dp"
+        android:hint="Enter constant c2"
+        android:inputType="numberDecimal"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_button" />
+
+    <!-- Calculate Button -->
+    <Button
+        android:id="@+id/buttonCalculateFirstDegree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calculate"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_button" />
+
+    <!-- Result Display -->
+    <TextView
+        android:id="@+id/textViewResultFirstDegree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Result: "
+        android:layout_marginTop="25dp"
+        android:textSize="18sp" />
+</LinearLayout>

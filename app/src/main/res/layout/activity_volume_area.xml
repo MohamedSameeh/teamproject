@@ -11,12 +11,13 @@
         android:id="@+id/btn_volume"
         android:layout_width="200dp"
         android:layout_height="150dp"
-        android:layout_marginTop="164dp"
+        android:layout_marginTop="84dp"
         android:background="@drawable/rounded_button"
         android:text="Volume"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/btn_area"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/btn_area"
         app:layout_constraintTop_toBottomOf="@+id/btn_area" />
 
@@ -24,13 +25,27 @@
         android:id="@+id/btn_area"
         android:layout_width="200dp"
         android:layout_height="150dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/rounded_button"
         android:text="Area"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_equations"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="84dp"
+        android:background="@drawable/rounded_button"
+        android:text="Equations"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/btn_volume"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_volume"
+        app:layout_constraintTop_toBottomOf="@+id/btn_volume" />
 </androidx.constraintlayout.widget.ConstraintLayout>
